@@ -3,29 +3,30 @@ import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentation
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
 import { Resource } from '@opentelemetry/resources';
 import { DiagConsoleLogger, DiagLogLevel, diag } from '@opentelemetry/api';
-
+import {   SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
 
 interface Config {
     endpoint: string;
     instruments: (
         'http' | 'express' | 'mongodb' | 'socket' |
-        'graphql' | 'redis' | 'mysql' | 'aws-sdk' | 'mongoose' | 'fs'
+        'graphql' | 'redis' | 'mysql' | 'aws' | 'mongoose' | 'fs'
     )[];
     serviceName?: string;
     logLevel?: DiagLogLevel;
 }
 
-export default function register(config: Config) {
+export function register(config: Config) {
     const { endpoint, instruments } = config;
 
-    const resource = Resource.default().merge(
-        // fix according to deprecated API
+    const resource = 
         new Resource({
-        'service.name': config.serviceName,
+            [SemanticResourceAttributes.SERVICE_NAME]: config.serviceName,
+            [SemanticResourceAttributes.SERVICE_VERSION]: "0.0.1",
+            [SemanticResourceAttributes.SERVICE_INSTANCE_ID]:`uuidgen`
         })
-      );
+      
 
-      diag.setLogger(new DiagConsoleLogger(), DiagLogLevel.INFO);
+      diag.setLogger(new DiagConsoleLogger(), config.logLevel || DiagLogLevel.INFO);
       
     const sdk = new NodeSDK({
         traceExporter: new OTLPTraceExporter({
@@ -40,15 +41,14 @@ export default function register(config: Config) {
             '@opentelemetry/instrumentation-graphql': { enabled: instruments.includes('graphql') },
             '@opentelemetry/instrumentation-redis': { enabled: instruments.includes('redis') },
             '@opentelemetry/instrumentation-mysql': { enabled: instruments.includes('mysql') },
-            '@opentelemetry/instrumentation-aws-sdk': { enabled: instruments.includes('aws-sdk') },
+            '@opentelemetry/instrumentation-aws-sdk': { enabled: instruments.includes('aws') },
             '@opentelemetry/instrumentation-mongoose': { enabled: instruments.includes('mongoose') },
             '@opentelemetry/instrumentation-fs': { enabled: instruments.includes('fs') },
         }),
-        resource: resource || Resource.default(),
+        resource: config.serviceName ? resource : Resource.default(),
     });
 
         sdk.start();
-    
         process.on("SIGTERM", () => {
             sdk
                 .shutdown()
