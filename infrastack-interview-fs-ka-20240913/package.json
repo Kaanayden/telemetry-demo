@@ -1,6 +1,6 @@
 {
-  "name": "infrastack-interview-fs-ka-20240913",
-  "version": "1.0.0",
+  "name": "infrastack-interview-fs-ka",
+  "version": "1.0.1",
   "description": "OpenTelemetry SDK helper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -14,8 +14,10 @@
   "dependencies": {
     "@opentelemetry/api": "^1.9.0",
     "@opentelemetry/auto-instrumentations-node": "^0.50.0",
+    "@opentelemetry/exporter-metrics-otlp-grpc": "^0.53.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.53.0",
     "@opentelemetry/resources": "^1.26.0",
+    "@opentelemetry/sdk-metrics": "^1.26.0",
     "@opentelemetry/sdk-node": "^0.53.0",
     "@opentelemetry/sdk-trace-base": "^1.26.0",
     "@opentelemetry/semantic-conventions": "^1.27.0"

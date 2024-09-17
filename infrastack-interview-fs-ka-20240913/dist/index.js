@@ -4,9 +4,11 @@ exports.register = void 0;
 const sdk_node_1 = require("@opentelemetry/sdk-node");
 const auto_instrumentations_node_1 = require("@opentelemetry/auto-instrumentations-node");
 const exporter_trace_otlp_grpc_1 = require("@opentelemetry/exporter-trace-otlp-grpc");
+const exporter_metrics_otlp_grpc_1 = require("@opentelemetry/exporter-metrics-otlp-grpc");
 const resources_1 = require("@opentelemetry/resources");
 const api_1 = require("@opentelemetry/api");
 const semantic_conventions_1 = require("@opentelemetry/semantic-conventions");
+const sdk_metrics_1 = require("@opentelemetry/sdk-metrics");
 function register(config) {
     const { endpoint, instruments } = config;
     const resource = new resources_1.Resource({
@@ -15,6 +17,11 @@ function register(config) {
         [semantic_conventions_1.SemanticResourceAttributes.SERVICE_INSTANCE_ID]: `uuidgen`
     });
     api_1.diag.setLogger(new api_1.DiagConsoleLogger(), config.logLevel || api_1.DiagLogLevel.INFO);
+    // Create metric exporter
+    const metricExporter = new exporter_metrics_otlp_grpc_1.OTLPMetricExporter({
+        url: endpoint, // Same or different URL for metrics endpoint
+    });
+    // Add periodic metric reader for exporting metrics
     const sdk = new sdk_node_1.NodeSDK({
         traceExporter: new exporter_trace_otlp_grpc_1.OTLPTraceExporter({
             url: endpoint,
@@ -33,8 +40,13 @@ function register(config) {
             '@opentelemetry/instrumentation-fs': { enabled: instruments.includes('fs') },
         }),
         resource: config.serviceName ? resource : resources_1.Resource.default(),
+        metricReader: new sdk_metrics_1.PeriodicExportingMetricReader({
+            exporter: metricExporter,
+            exportIntervalMillis: 50000,
+        })
     });
     sdk.start();
+    api_1.diag.info("Tracing initialized");
     process.on("SIGTERM", () => {
         sdk
             .shutdown()

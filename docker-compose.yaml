@@ -3,6 +3,11 @@ version: '3.8'
 services:
   otel-collector:
     image: otel/opentelemetry-collector-contrib
+    environment:
+      OTEL_EXPORTER_CLICKHOUSE_ENDPOINT: ${OTEL_EXPORTER_CLICKHOUSE_ENDPOINT}
+      OTEL_EXPORTER_CLICKHOUSE_DATABASE: ${OTEL_EXPORTER_CLICKHOUSE_DATABASE}
+      OTEL_EXPORTER_CLICKHOUSE_USERNAME: ${OTEL_EXPORTER_CLICKHOUSE_USERNAME}
+      OTEL_EXPORTER_CLICKHOUSE_PASSWORD: ${OTEL_EXPORTER_CLICKHOUSE_PASSWORD}
     volumes:
       - ./collector/otel-collector-config.yaml:/etc/otelcol-contrib/config.yaml
     ports:

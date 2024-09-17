@@ -1,9 +1,11 @@
 import { NodeSDK } from '@opentelemetry/sdk-node';
 import { getNodeAutoInstrumentations } from '@opentelemetry/auto-instrumentations-node';
 import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
+import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
 import { Resource } from '@opentelemetry/resources';
 import { DiagConsoleLogger, DiagLogLevel, diag } from '@opentelemetry/api';
 import {   SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
+import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
 
 interface Config {
     endpoint: string;
@@ -28,6 +30,15 @@ export function register(config: Config) {
 
       diag.setLogger(new DiagConsoleLogger(), config.logLevel || DiagLogLevel.INFO);
       
+    // Create metric exporter
+    const metricExporter = new OTLPMetricExporter({
+        url: endpoint, // Same or different URL for metrics endpoint
+    });
+
+
+    // Add periodic metric reader for exporting metrics
+
+
     const sdk = new NodeSDK({
         traceExporter: new OTLPTraceExporter({
             url: endpoint,
@@ -46,9 +57,14 @@ export function register(config: Config) {
             '@opentelemetry/instrumentation-fs': { enabled: instruments.includes('fs') },
         }),
         resource: config.serviceName ? resource : Resource.default(),
+        metricReader: new PeriodicExportingMetricReader({
+            exporter: metricExporter,
+            exportIntervalMillis: 5000, 
+        })
     });
-
         sdk.start();
+        diag.info("Tracing initialized");
+
         process.on("SIGTERM", () => {
             sdk
                 .shutdown()

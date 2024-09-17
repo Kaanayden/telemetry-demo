@@ -137,6 +137,31 @@
     "@opentelemetry/sdk-logs" "0.53.0"
     "@opentelemetry/sdk-trace-base" "1.26.0"
 
+"@opentelemetry/exporter-metrics-otlp-grpc@^0.53.0":
+  version "0.53.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-metrics-otlp-grpc/-/exporter-metrics-otlp-grpc-0.53.0.tgz#adba3783a978ea93c1a1c6e908d5c73bc243f834"
+  integrity sha512-2wjAccaG4yBxjfPqDeeXEYymwo1OYybUmBxUutDPeu0ColVkXyHIOxKSdHdn6vAn/v20m4w9E6SrSl4jtuZdiA==
+  dependencies:
+    "@grpc/grpc-js" "^1.7.1"
+    "@opentelemetry/core" "1.26.0"
+    "@opentelemetry/exporter-metrics-otlp-http" "0.53.0"
+    "@opentelemetry/otlp-exporter-base" "0.53.0"
+    "@opentelemetry/otlp-grpc-exporter-base" "0.53.0"
+    "@opentelemetry/otlp-transformer" "0.53.0"
+    "@opentelemetry/resources" "1.26.0"
+    "@opentelemetry/sdk-metrics" "1.26.0"
+
+"@opentelemetry/exporter-metrics-otlp-http@0.53.0":
+  version "0.53.0"
+  resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-metrics-otlp-http/-/exporter-metrics-otlp-http-0.53.0.tgz#27ce0bf1f22d0cc4afae4e7a313e292b6c438300"
+  integrity sha512-nvZtOk23pZOrTW10Za2WPd9pk4tWDvL6ALlHRFfInpcTjtOgCrv+fQDxpzosa5PeXvYeFFUO5aYCTnwiCX4Dzg==
+  dependencies:
+    "@opentelemetry/core" "1.26.0"
+    "@opentelemetry/otlp-exporter-base" "0.53.0"
+    "@opentelemetry/otlp-transformer" "0.53.0"
+    "@opentelemetry/resources" "1.26.0"
+    "@opentelemetry/sdk-metrics" "1.26.0"
+
 "@opentelemetry/exporter-trace-otlp-grpc@0.53.0", "@opentelemetry/exporter-trace-otlp-grpc@^0.53.0":
   version "0.53.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/exporter-trace-otlp-grpc/-/exporter-trace-otlp-grpc-0.53.0.tgz#716429f58e71e101fc1fa79b3634083faf7f76da"
@@ -653,7 +678,7 @@
     "@opentelemetry/core" "1.26.0"
     "@opentelemetry/resources" "1.26.0"
 
-"@opentelemetry/sdk-metrics@1.26.0", "@opentelemetry/sdk-metrics@^1.9.1":
+"@opentelemetry/sdk-metrics@1.26.0", "@opentelemetry/sdk-metrics@^1.26.0", "@opentelemetry/sdk-metrics@^1.9.1":
   version "1.26.0"
   resolved "https://registry.yarnpkg.com/@opentelemetry/sdk-metrics/-/sdk-metrics-1.26.0.tgz#37bb0afb1d4447f50aab9cdd05db6f2d8b86103e"
   integrity sha512-0SvDXmou/JjzSDOjUmetAAvcKQW6ZrvosU0rkbDGpXvvZN+pQF6JbK/Kd4hNdK4q/22yeruqvukXEJyySTzyTQ==

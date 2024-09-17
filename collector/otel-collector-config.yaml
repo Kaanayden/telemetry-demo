@@ -3,20 +3,56 @@ receivers:
     protocols:
       grpc:
         endpoint: "0.0.0.0:4317"
+  filelog:
+    include:
+      - /opt/data/logs/access-structured.log
+    start_at: beginning
+    operators:
+      - type: json_parser
+        timestamp:
+          parse_from: attributes.time_local
+          layout: '%Y-%m-%d %H:%M:%S'
+
+processors:
+  batch:
+    timeout: 5s
+    send_batch_size: 100
 
 exporters:
-  logging:
-    loglevel: debug
-  otlp:
-    endpoint: "0.0.0.0:4351"
+  clickhouse:
+    endpoint: "${OTEL_EXPORTER_CLICKHOUSE_ENDPOINT}"
+    database: "${OTEL_EXPORTER_CLICKHOUSE_DATABASE}"
+    username: "${OTEL_EXPORTER_CLICKHOUSE_USERNAME}"
+    password: "${OTEL_EXPORTER_CLICKHOUSE_PASSWORD}"
+    async_insert: true
+    ttl: 72h
+    compress: lz4
+    create_schema: true
+    logs_table_name: otel_logs
+    traces_table_name: otel_traces
+    metrics_table_name: otel_metrics
+    timeout: 5s
+    retry_on_failure:
+      enabled: true
+      initial_interval: 5s
+      max_interval: 30s
+      max_elapsed_time: 300s
+    # cluster_name: my_cluster
+    # table_engine:
+    #   name: ReplicatedMergeTree
+    #   params:
 
 service:
   pipelines:
     traces:
       receivers: [otlp]
-      processors: []
-      exporters: [logging, otlp]
+      processors: [batch]
+      exporters: [clickhouse]
     metrics:
       receivers: [otlp]
-      processors: []
-      exporters: [logging, otlp]
+      processors: [batch]
+      exporters: [clickhouse]
+    logs:
+      receivers: [otlp]
+      processors: [batch]
+      exporters: [clickhouse]
