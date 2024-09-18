@@ -42,7 +42,7 @@ function register(config) {
         resource: config.serviceName ? resource : resources_1.Resource.default(),
         metricReader: new sdk_metrics_1.PeriodicExportingMetricReader({
             exporter: metricExporter,
-            exportIntervalMillis: 50000,
+            exportIntervalMillis: 5000,
         })
     });
     sdk.start();
