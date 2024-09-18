@@ -2,6 +2,18 @@
 # yarn lockfile v1
 
 
+"@clickhouse/client-common@1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@clickhouse/client-common/-/client-common-1.6.0.tgz#371a64592f55758ac7ddca707a30b78cfc656f84"
+  integrity sha512-DPdfPUIrBumWff8JdE2oLqnOIN1DwxXt48juV+tB6zaonufQR1QImtUGEhIFIqRWJU7zErtQ1eKfkwjLY0MYDg==
+
+"@clickhouse/client@^1.6.0":
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/@clickhouse/client/-/client-1.6.0.tgz#703d7b4aef35c60987db9e8f8f4420da1f93adc3"
+  integrity sha512-cjuOL5O11Y/axYIvSaNgZjZqD53BBbScrG0DCgZ7XBCz5KWlA5lIG3fP6A4jME277q8ZUYAQxUOlJjeF18872A==
+  dependencies:
+    "@clickhouse/client-common" "1.6.0"
+
 "@grpc/grpc-js@^1.7.1":
   version "1.11.2"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.11.2.tgz#541a00303e533b5efe9d84ed61b84cdf9dd93ee7"
@@ -942,6 +954,11 @@ debug@4, debug@^4.3.4, debug@^4.3.5:
   integrity sha512-Er2nc/H7RrMXZBFCEim6TCmMk02Z8vLC2Rbi1KEBggpo0fS6l0S1nnapwmIi3yW/+GOJap1Krg4w0Hg80oCqgQ==
   dependencies:
     ms "^2.1.3"
+
+dotenv@^16.4.5:
+  version "16.4.5"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
 emoji-regex@^8.0.0:
   version "8.0.0"
