@@ -9,14 +9,14 @@ const storageRouter = require('./routers/storageRouter');
 
 register({
     endpoint: 'http://localhost:4317', // Your OTLP endpoint
-    instruments: ['http', 'express', 'fs', ''], // List the libraries you want to instrument
+    instruments: ['http', 'express', 'fs', 'system'], // List the libraries you want to instrument
     serviceName: process.env.SERVICE_NAME || 'image-server', // Optional: Define the service name
     logLevel: DiagLogLevel.DEBUG,
 })
 
 
 const app = express()
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 3000
 
 
 

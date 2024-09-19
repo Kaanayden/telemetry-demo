@@ -66,13 +66,13 @@ app.get('/orders/where-is-delivery', (req: Request, res: Response) => {
 
 
 // Endpoint for updating delivery location information
-app.put('/inform-delivery-status', (req: Request, res: Response) => {
+app.put('/orders/update-delivery-status', (req: Request, res: Response) => {
     const { deliveryId, status } = req.body;
 
     // Process the purchase order and return a response
     // ...
 
-    res.status(200).json({ message: 'Order delivery status is informed to the user' });
+    res.status(200).json({ message: 'Order delivery status is updated' });
 });
 
 
