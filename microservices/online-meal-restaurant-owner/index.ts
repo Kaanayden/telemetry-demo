@@ -5,7 +5,7 @@ import fs from 'fs';
 
 
 register({
-    endpoint: 'http://localhost:4317', // Your OTLP endpoint
+    endpoint: process.env.OTLP_ENDPOINT || 'http://localhost:4317', // Your OTLP endpoint
     instruments: ['http', 'express', 'system', 'fs'], // List the libraries you want to instrument
     serviceName: process.env.SERVICE_NAME || 'meal-restaurant-owner', // Optional: Define the service name
     logLevel: DiagLogLevel.DEBUG,

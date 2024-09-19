@@ -18,3 +18,73 @@ services:
       - 4317:4317 # OTLP gRPC receiver
       - 4318:4318 # OTLP http receiver
       - 55679:55679 # zpages extension
+  
+  meal-order:
+    build: ./microservices/online-meal-order
+    environment:
+      - OTLP_ENDPOINT=http://otel-collector:4317
+    ports:
+      - "${MEAL_ORDER_PORT}:3000"
+    env_file:
+    - .env
+
+  meal-restaurant:
+    build: ./microservices/online-meal-restaurant-owner
+    environment:
+      - OTLP_ENDPOINT=http://otel-collector:4317
+    ports:
+      - "${MEAL_RESTAURANT_PORT}:3000" 
+    env_file:
+    - .env
+
+  image-server:
+    build: ./microservices/image-server
+    environment:
+      - OTLP_ENDPOINT=http://otel-collector:4317
+    ports:
+      - "${IMAGE_PORT}:3000" 
+    env_file:
+    - .env
+
+  delivery-service1:
+    build: ./microservices/delivery-service
+    environment:
+      - OTLP_ENDPOINT=http://otel-collector:4317
+      - SERVICE_NAME=delivery-service1
+    ports:
+      - "${DELIVERY_PORT1}:3000"
+    env_file:
+    - .env
+
+  delivery-service2:
+    build: ./microservices/delivery-service
+    environment:
+      - OTLP_ENDPOINT=http://otel-collector:4317
+      - SERVICE_NAME=delivery-service2
+    ports:
+      - "${DELIVERY_PORT2}:3000" 
+    env_file:
+    - .env
+
+  delivery-service3:
+    build: ./microservices/delivery-service
+    environment:
+      - OTLP_ENDPOINT=http://otel-collector:4317
+      - SERVICE_NAME=delivery-service3
+    ports:
+      - "${DELIVERY_PORT3}:3000" 
+    env_file:
+    - .env
+
+  delivery-service4:
+    build: ./microservices/delivery-service
+    environment:
+      - OTLP_ENDPOINT=http://otel-collector:4317
+      - SERVICE_NAME=delivery-service4
+    ports:
+      - "${DELIVERY_PORT4}:3000" 
+    env_file:
+    - .env
+
+
+
