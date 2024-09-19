@@ -1,6 +1,6 @@
 {
   "name": "infrastack-interview-fs-ka",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "OpenTelemetry SDK helper",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

@@ -1,0 +1,19 @@
+{
+  "name": "image-server",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/Kaanayden/image-server.git",
+  "author": "Kaan Aydeniz <kaanayden15@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "infrastack-interview-fs-ka": "1.0.3",
+    "multer": "^1.4.5-lts.1",
+    "uuid": "^10.0.0"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
