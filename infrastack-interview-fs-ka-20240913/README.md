@@ -19,6 +19,8 @@ This is a simple wrapper for OpenTelemetry's Node.js SDK. It automatically confi
 - AWS SDK
 - Mongoose
 - File System (fs)
+- System Metrics
+- Node Runtime
 
 ## Installation
 
@@ -44,7 +46,7 @@ register({
   endpoint: 'http://localhost:4317', // Your OTLP endpoint
   instruments: ['http', 'express', 'mongodb'], // List the libraries you want to instrument
   serviceName: 'my-node-service', // Optional: Define the service name
-  logLevel: 1 // Optional: Set the log level (DiagLogLevel)
+  logLevel: DiagLogLevel.DEBUG // Optional: Set the log level (DiagLogLevel)
 });
 ```
 
@@ -64,13 +66,13 @@ Make sure your OTLP backend (like Jaeger or a collector) is up and running. The 
 ### Example
 
 ```typescript
-import { register } from 'infrastack-interview-fs-ka';
+import { register, DiagLogLevel } from 'infrastack-interview-fs-ka';
 
 register({
     endpoint: 'http://localhost:4317',
-    instruments: ['http', 'express', 'redis', 'graphql'],
+    instruments: ['http', 'express', 'redis', 'system'],
     serviceName: 'my-awesome-service',
-    logLevel: 2 // DiagLogLevel.DEBUG
+    logLevel: DiagLogLevel.DEBUG
 });
 ```
 
@@ -81,12 +83,12 @@ The wrapper automatically handles shutdown when the process receives a `SIGTERM`
 ### Logging
 
 The `logLevel` parameter controls the verbosity of OpenTelemetry's internal logging. It can be set to any value from `DiagLogLevel`:
-- `DiagLogLevel.NONE` = 0
-- `DiagLogLevel.ERROR` = 1
-- `DiagLogLevel.WARN` = 2
-- `DiagLogLevel.INFO` = 3
-- `DiagLogLevel.DEBUG` = 4
-- `DiagLogLevel.VERBOSE` = 5
+- `DiagLogLevel.NONE`
+- `DiagLogLevel.ERROR`
+- `DiagLogLevel.WARN`
+- `DiagLogLevel.INFO`
+- `DiagLogLevel.DEBUG`
+- `DiagLogLevel.VERBOSE`
 
 ## License
 [MIT](LICENSE)

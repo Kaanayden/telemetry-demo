@@ -4,14 +4,15 @@ import { OTLPTraceExporter } from '@opentelemetry/exporter-trace-otlp-grpc';
 import { OTLPMetricExporter } from '@opentelemetry/exporter-metrics-otlp-grpc';
 import { Resource } from '@opentelemetry/resources';
 import { DiagConsoleLogger, DiagLogLevel, diag } from '@opentelemetry/api';
-import {   SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
-import { PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
-
+import { SemanticResourceAttributes } from "@opentelemetry/semantic-conventions";
+import { MeterProvider, PeriodicExportingMetricReader } from '@opentelemetry/sdk-metrics';
+import { RuntimeNodeInstrumentation } from '@opentelemetry/instrumentation-runtime-node';
+import { HostMetrics } from '@opentelemetry/host-metrics';
 interface Config {
     endpoint: string;
     instruments: (
         'http' | 'express' | 'mongodb' | 'socket' |
-        'graphql' | 'redis' | 'mysql' | 'aws' | 'mongoose' | 'fs'
+        'graphql' | 'redis' | 'mysql' | 'aws' | 'mongoose' | 'fs' | 'runtime' | 'system'
     )[];
     serviceName?: string;
     logLevel?: DiagLogLevel;
@@ -20,23 +21,41 @@ interface Config {
 export function register(config: Config) {
     const { endpoint, instruments } = config;
 
-    const resource = 
+    const resource =
         new Resource({
-            [SemanticResourceAttributes.SERVICE_NAME]: config.serviceName,
+            [SemanticResourceAttributes.SERVICE_NAME]: config.serviceName || "test-service",
             [SemanticResourceAttributes.SERVICE_VERSION]: "0.0.1",
-            [SemanticResourceAttributes.SERVICE_INSTANCE_ID]:`uuidgen`
+            [SemanticResourceAttributes.SERVICE_INSTANCE_ID]: `uuidgen`
         })
-      
-
-      diag.setLogger(new DiagConsoleLogger(), config.logLevel || DiagLogLevel.INFO);
-      
-    // Create metric exporter
-    const metricExporter = new OTLPMetricExporter({
-        url: endpoint, // Same or different URL for metrics endpoint
-    });
 
 
-    // Add periodic metric reader for exporting metrics
+    diag.setLogger(new DiagConsoleLogger(), config.logLevel || DiagLogLevel.INFO);
+
+
+    if (instruments.includes('system')) {
+
+        // Create metric exporter
+        const metricExporter = new OTLPMetricExporter({
+            url: endpoint, // Same or different URL for metrics endpoint
+        });
+
+
+        // Add periodic metric reader for exporting metrics
+
+        const metricReader = new PeriodicExportingMetricReader({
+            exporter: metricExporter,
+            exportIntervalMillis: 30000,
+        })
+
+        const meterProvider = new MeterProvider({
+            readers: [metricReader],
+            resource: resource
+        });
+
+        const hostMetrics = new HostMetrics({ meterProvider });
+        hostMetrics.start();
+
+    }
 
 
     const sdk = new NodeSDK({
@@ -44,7 +63,7 @@ export function register(config: Config) {
             url: endpoint,
         }),
         // Some popular instrumentations
-        instrumentations: getNodeAutoInstrumentations({
+        instrumentations: [...getNodeAutoInstrumentations({
             '@opentelemetry/instrumentation-http': { enabled: instruments.includes('http') },
             '@opentelemetry/instrumentation-express': { enabled: instruments.includes('express') },
             '@opentelemetry/instrumentation-mongodb': { enabled: instruments.includes('mongodb') },
@@ -56,24 +75,21 @@ export function register(config: Config) {
             '@opentelemetry/instrumentation-mongoose': { enabled: instruments.includes('mongoose') },
             '@opentelemetry/instrumentation-fs': { enabled: instruments.includes('fs') },
         }),
+        new RuntimeNodeInstrumentation({ eventLoopUtilizationMeasurementInterval: 30000, enabled: instruments.includes('runtime') }),
+        ],
         resource: config.serviceName ? resource : Resource.default(),
-        metricReader: new PeriodicExportingMetricReader({
-            exporter: metricExporter,
-            exportIntervalMillis: 5000, 
-        })
     });
-        sdk.start();
-        diag.info("Tracing initialized");
+    sdk.start();
+    diag.info("Tracing initialized");
 
-        process.on("SIGTERM", () => {
-            sdk
-                .shutdown()
-                .then(() => console.log("Tracing terminated"))
-                .catch((error) => console.log("Error terminating tracing", error))
-                .finally(() => process.exit(0));
-        });
+    process.on("SIGTERM", () => {
+        sdk
+            .shutdown()
+            .then(() => console.log("Tracing terminated"))
+            .catch((error) => console.log("Error terminating tracing", error))
+            .finally(() => process.exit(0));
+    });
 
-    };
+};
 
-
-
+export { DiagLogLevel };
