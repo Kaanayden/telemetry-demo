@@ -9,9 +9,9 @@ const storageRouter = require('./routers/storageRouter');
 
 register({
   endpoint: process.env.OTLP_ENDPOINT || 'http://localhost:4317', // Your OTLP endpoint
-    instruments: ['http', 'express', 'fs', 'system'], // List the libraries you want to instrument
-    serviceName: process.env.SERVICE_NAME || 'image-server', // Optional: Define the service name
-    logLevel: DiagLogLevel.DEBUG,
+  instruments: ['http', 'express', 'fs', 'system'], // List the libraries you want to instrument
+  serviceName: process.env.SERVICE_NAME || 'image-server', // Optional: Define the service name
+  logLevel: DiagLogLevel.DEBUG,
 })
 
 
@@ -34,7 +34,7 @@ defaultRouter.use('/public', express.static('public'))
 defaultRouter.use('/storage', storageRouter)
 
 app.use('/image-server', defaultRouter);
-  
+
 app.listen(port, () => {
   console.log(`Image server listening on port ${port}`)
 })

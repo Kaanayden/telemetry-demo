@@ -27,6 +27,7 @@ services:
       - "${MEAL_ORDER_PORT}:3000"
     env_file:
     - .env
+    restart: always
 
   meal-restaurant:
     build: ./microservices/online-meal-restaurant-owner
@@ -36,6 +37,7 @@ services:
       - "${MEAL_RESTAURANT_PORT}:3000" 
     env_file:
     - .env
+    restart: always
 
   image-server:
     build: ./microservices/image-server
@@ -45,6 +47,7 @@ services:
       - "${IMAGE_PORT}:3000" 
     env_file:
     - .env
+    restart: always
 
   delivery-service1:
     build: ./microservices/delivery-service
@@ -55,6 +58,7 @@ services:
       - "${DELIVERY_PORT1}:3000"
     env_file:
     - .env
+    restart: always
 
   delivery-service2:
     build: ./microservices/delivery-service
@@ -65,6 +69,7 @@ services:
       - "${DELIVERY_PORT2}:3000" 
     env_file:
     - .env
+    restart: always
 
   delivery-service3:
     build: ./microservices/delivery-service
@@ -75,6 +80,7 @@ services:
       - "${DELIVERY_PORT3}:3000" 
     env_file:
     - .env
+    restart: always
 
   delivery-service4:
     build: ./microservices/delivery-service
@@ -85,6 +91,7 @@ services:
       - "${DELIVERY_PORT4}:3000" 
     env_file:
     - .env
+    restart: always
 
 
 

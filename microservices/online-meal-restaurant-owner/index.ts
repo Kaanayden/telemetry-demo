@@ -22,10 +22,10 @@ async function getDeliveryPrices() {
     // ...
 
 
-    const apis = [`${process.env.SERVICE_URL}:${process.env.DELIVERY_PORT1}/get-delivery-prices`,
-    `${process.env.SERVICE_URL}:${process.env.DELIVERY_PORT2}/get-delivery-prices`,
-    `${process.env.SERVICE_URL}:${process.env.DELIVERY_PORT3}/get-delivery-prices`,
-    `${process.env.SERVICE_URL}:${process.env.DELIVERY_PORT4}/get-delivery-prices`
+    const apis = [`${process.env.SERVICE_URL}:${process.env.DELIVERY_PORT1}/delivery-price`,
+    `${process.env.SERVICE_URL}:${process.env.DELIVERY_PORT2}/delivery-price`,
+    `${process.env.SERVICE_URL}:${process.env.DELIVERY_PORT3}/delivery-price`,
+    `${process.env.SERVICE_URL}:${process.env.DELIVERY_PORT4}/delivery-price`
     ];
 
     const prices: { url: string; price: number; }[] = [];
@@ -46,13 +46,14 @@ async function uploadMenuImage() {
 
     const exampleImage = fs.readFileSync('./assets/exampleImage.jpeg');
     const blob = new Blob([exampleImage], { type: 'image/jpeg' });
+    console.log("blob", blob)
     form.append('images', blob, 'menu.jpg');
 
     const resp = await fetch(`${process.env.SERVICE_URL}:${process.env.IMAGE_PORT}/image-server/storage/uploadBatch`, {
         method: "PUT",
         body: form,
         headers: {
-            "Authentication": process.env.IMAGE_SERVER_AUTH || ""
+            "authentication": process.env.AUTHENTICATION_TOKEN || ""
         }
     });
 
