@@ -47,6 +47,7 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
         <Separator/>
             <ScrollArea className="h-[calc(100vh-100px)] py-4">
               {services.allServices.map((service) => (
+                
                 <div key={String(service.ServiceName)} className="flex items-center p-2 hover:bg-gray-700 cursor-pointer">
                   <Server className="mr-2 text-gray-400" />
                   <span>{service.ServiceName}</span>

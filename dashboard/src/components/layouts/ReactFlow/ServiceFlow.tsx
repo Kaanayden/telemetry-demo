@@ -9,8 +9,10 @@ import { ReactFlow ,
   BackgroundVariant,
   Background,
 } from "@xyflow/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Services, UniqueRelation } from "@/utils/interfaces";
+import ServiceNode from "./ServiceNode";
+import { calculateGraphLayout } from "@/utils/graph/calculateGraphLayout";
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const snapGrid = [20, 20];
@@ -24,24 +26,63 @@ const nodeTypes = {
   };
   
 
-import ServiceNode from "./ServiceNode";
+
 
 export default function ServiceFlow(props : {services: Services, uniqueRelations: UniqueRelation[]}) {
 
-    const [bgColor, setBgColor] = useState(initBgColor);
-console.log("relation icinde:", props.uniqueRelations)
-    const nodes = props.services.activeServices.map((service) => ({
-        id: service.ServiceName,
-        type: 'serviceNode',
-        data: { service },
-        position: { x: Math.random() * 1000, y: Math.random() * 1000 },
-      }));
+  const [nodes, setNodes, onNodesChange] = useNodesState([]);
+  const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
-      const edges = props.uniqueRelations.map((relation) => ({
-        id: `${relation.from_service}-${relation.to_service}`,
-        source: relation.from_service,
-        target: relation.to_service,
-      }));
+    const [bgColor] = useState(initBgColor);
+console.log("relation icinde:", props.uniqueRelations)
+
+
+      useEffect( () => {
+        const newNodes = props.services.activeServices.map((service) => ({
+          id: service.ServiceName,
+          type: 'serviceNode',
+          data: { service },
+          position: { x: Math.random() * 100, y: Math.random() * 100 },
+        }));
+  
+        const newEdges = props.uniqueRelations.map((relation) => ({
+          id: `${relation.from_service}-${relation.to_service}`,
+          source: relation.from_service,
+          target: relation.to_service,
+        }));
+
+        const graph = {}
+        newNodes.forEach((node) => {
+          graph[node.id] = {
+            key: node.id,
+            vertices: newEdges.filter((edge) => edge.source === node.id || edge.target === node.id).map((edge) => edge.source === node.id ? edge.target : edge.source),
+            data: node.data
+          }
+      });
+
+      console.log("graph", graph)
+
+        const {simulationJson, layoutNodes} = calculateGraphLayout(graph, newNodes[0].id);
+
+      console.log("simulationJson", simulationJson, layoutNodes)
+      console.log("newNodes", newNodes, layoutNodes)
+
+      const formattedNodes = simulationJson.nodes.map((node) => {
+        return {
+          id: node.id,
+          type: 'serviceNode',
+          data: { service: graph[node.id].data.service },
+          position: { x: node.x, y: node.y },
+        }
+
+      })
+
+      console.log("diff:", formattedNodes, newNodes)
+
+        setNodes(formattedNodes);
+        setEdges(newEdges);
+
+      }, [] );
 
     return(
 
