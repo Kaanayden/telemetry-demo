@@ -44,7 +44,7 @@ function horizontalToVerticalHandle(xDiff, yDiff, sourceX) {
   return { sourceHandle, targetHandle };
 }
 
-export default function calculateEdgeHandle(sourceX, sourceY, targetX, targetY) {
+export function calculateEdgeHandle(sourceX, sourceY, targetX, targetY) {
   let sourceHandle;
   let targetHandle;
   let newSourceX; let newSourceY;

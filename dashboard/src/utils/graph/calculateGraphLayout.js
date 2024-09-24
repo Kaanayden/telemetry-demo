@@ -1,3 +1,5 @@
+
+
 import {
   forceSimulation,
   forceLink,
@@ -9,26 +11,6 @@ import collide from './collide';
 
 const INITIAL_X = 0;
 const INITIAL_Y = 0;
-
-export function setupSimulation(nodes, links) {
-  console.log('links:', links);
-  const simulation = forceSimulation()
-    .nodes(nodes)
-    .force('charge', forceManyBody().strength(-3400))
-    .force('x', forceX().x(0).strength(0.01))
-    .force('y', forceY().y(0).strength(0.03))
-    .force('collide', collide())
-    .force('link',
-      forceLink(links)
-        .id(d => d.id)
-        .strength(0.1)
-        .distance(320)
-    )
-    .alphaTarget(0.05)
-    .tick(30000)
-    .stop();
-  return simulation;
-}
 
 function addGraphNeighbours(rootKey, graph, nodeMap, edges) {
   console.log('init graph:', rootKey, graph, nodeMap, edges);
@@ -91,8 +73,6 @@ function initializeGraph(graph, rootKey) {
     id: rootNode.key,
     x: INITIAL_X,
     y: INITIAL_Y,
-    fx: 0,
-    fy: 0,
     vertices: rootNode.vertices
   };
   nodeMap[rootNode.key] = rootFlowNode;
@@ -113,9 +93,9 @@ function calculateInitialGraph(nodes, edges) {
   const layoutEdges = edges.map(value => ({ ...value }));
   const simulation = forceSimulation()
     .nodes(layoutNodes)
-    .force('charge', forceManyBody().strength(-3400))
-    .force('x', forceX().x(0).strength(0.01))
-    .force('y', forceY().y(0).strength(0.03))
+    .force('charge', forceManyBody().strength(-5000))
+    .force('x', forceX().x(0).strength(0.02))
+    .force('y', forceY().y(0).strength(0.02))
     // .force('xLink', forceX().strength(-1))
     // .force('yLink', forceY().strength(-1))
     .force('collide', collide())
@@ -123,17 +103,16 @@ function calculateInitialGraph(nodes, edges) {
       forceLink(layoutEdges)
         .id(d => d.id)
         .strength(0.1)
-        .distance(320)
+        .distance(300)
     )
     .alphaTarget(0.05)
-    .tick(30000)
+    .tick(20000)
     .stop();
 
-  // simulation = setupSimulation(simulation.nodes(), simulation.force('link').links());
-  // simulation.tick(20000).stop();
 
   return { simulation, layoutNodes, layoutEdges };
 }
+
 
 export function calculateGraphLayout(graph, rootKey) {
 
