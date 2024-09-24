@@ -1,6 +1,7 @@
 import express, { Request, Response, } from 'express';
 import { register, DiagLogLevel } from 'infrastack-interview-fs-ka'
 import bodyParser from 'body-parser';
+import fs from 'fs';
 
 register({
     endpoint: process.env.OTLP_ENDPOINT || 'http://localhost:4317', // Your OTLP endpoint
@@ -32,6 +33,27 @@ app.get('/orders/:orderId', (req: Request, res: Response) => {
     // ...
 
     res.status(200).json({ orderId, mealId: '123', quantity: 2, status: 'Delivered' });
+});
+
+// Endpoint for getting menu image
+app.post('/restaurants/comment/upload-picture', async (req: Request, res: Response) => {
+ 
+    const form = new FormData()
+
+    const exampleImage = fs.readFileSync('./assets/exampleImage.jpeg');
+    const blob = new Blob([exampleImage], { type: 'image/jpeg' });
+    console.log("blob", blob)
+    form.append('images', blob, 'menu.jpg');
+
+    const resp = await fetch(`${process.env.SERVICE_URL}:${process.env.IMAGE_PORT}/image-server/storage/uploadBatch`, {
+        method: "PUT",
+        body: form,
+        headers: {
+            "authentication": process.env.AUTHENTICATION_TOKEN || ""
+        }
+    });
+
+    res.status(200).json({ message: 'Image uploaded successfully' });
 });
 
 // Endpoint for purchasing an order
