@@ -132,6 +132,7 @@ export default function ServiceFlow(props: { services: Services, uniqueRelations
         type: 'arrowclosed',
         width: 12,
         height: 12,
+        color: '#4bf712',
       },
       deletable: false,
       focusable: false,

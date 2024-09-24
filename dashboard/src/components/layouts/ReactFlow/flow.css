@@ -1,10 +1,8 @@
 path.react-flow__edge-path {
     stroke-width: 3;
+    stroke: #4bf712;
   }
   
-  path.react-flow__edge-path:hover {
-    stroke-width: 5;
-  }
 
 .react-flow__node-serviceNode.listHover .serviceNodeContainer {
     background-color: rgb(51 65 85);

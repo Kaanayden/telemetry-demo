@@ -16,9 +16,9 @@ export default async function Home({params}: {params: {serviceName: string}}) {
 const { serviceName } = params;
 
   const metrics = await (await fetch(`http://localhost:3000/api/${serviceName}/metrics?period=5m&since=5`, { cache: 'no-cache' })).json();
-  const traces = await (await fetch(`http://localhost:3000/api/${serviceName}/traces?since=5`, { cache: 'no-cache' })).json();
+  const traces = await (await fetch(`http://localhost:3000/api/${serviceName}/traces?since=15`, { cache: 'no-cache' })).json();
   return (
-    <ServicePage serviceName={serviceName} metrics={metrics} traces={traces}/>
+    <ServicePage serviceName={serviceName} metricData={metrics} traceData={traces}/>
   )
 
   // 
