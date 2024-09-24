@@ -12,25 +12,6 @@ import { Separator } from "@/components/ui/separator"
 import { useEdgesState, useNodes, useNodesData, useNodesState, useReactFlow } from '@xyflow/react'
 
 
-// Mock data for servers and their relations
-const servers = [
-  { id: 'server1', name: 'Web Server', status: 'online' },
-  { id: 'server2', name: 'Database Server', status: 'online' },
-  { id: 'server3', name: 'Cache Server', status: 'offline' },
-  { id: 'server4', name: 'Auth Server', status: 'online' },
-]
-
-const relations = [
-  { source: 'server1', target: 'server2' },
-  { source: 'server1', target: 'server3' },
-  { source: 'server2', target: 'server4' },
-  { source: 'server3', target: 'server4' },
-]
-
-
-
-
-
 export default function HomePage({ services, uniqueRelations }: HomePageProps) {
 
 
@@ -87,7 +68,7 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
   return (
     <div className="flex h-screen bg-gray-900 text-gray-100">
       {/* Sidebar */}
-      <div className="w-72 bg-gray-800 border-r border-gray-700">
+      <div className="w-72 bg-gray-800 rounded-md border border-gray-700 my-4">
         <div className="p-4">
           <Button
             variant="ghost"
@@ -120,20 +101,24 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 w-full h-[90%]">
-        <h1 className="text-2xl font-bold mb-4 mt-6 text-center text-gray-100">Telemetry Dashboard</h1>
-        <div className='px-4 '>
+      <div className="flex-1 w-full h-full">
+ <div className='px-4 '>
         <Separator className='bg-gray-600'/>
         </div>
         <div className="flex w-full h-full p-4">
+          <Card className="w-full h-full bg-gray-800 border-gray-700">
+            <CardHeader>
+              <CardTitle className="text-gray-100 text-center">Service Flow</CardTitle>
+            </CardHeader>
+            <CardContent className="h-[90%] text-white">
 
-              <ServiceFlow services={services} uniqueRelations={uniqueRelations}
+            <ServiceFlow services={services} uniqueRelations={uniqueRelations}
               nodes={nodes} setNodes={setNodes}
               edges={edges} setEdges={setEdges}
+              
               />
-
-
-
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

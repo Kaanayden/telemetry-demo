@@ -32,3 +32,12 @@ export interface TraceData {
     Events: object;
     Links: object;
   }
+
+  export interface MetricData {
+    
+        interval_start: string,
+        avg_process_memory_usage: number,
+        avg_system_memory_usage: number,
+        avg_system_memory_usage_percent: number
+    
+  }

@@ -102,8 +102,8 @@ function calculateInitialGraph(nodes, edges) {
     .force('link',
       forceLink(layoutEdges)
         .id(d => d.id)
-        .strength(0.1)
-        .distance(300)
+        .strength(0.15)
+        .distance(250)
     )
     .alphaTarget(0.05)
     .tick(20000)
