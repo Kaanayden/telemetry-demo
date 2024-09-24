@@ -164,7 +164,6 @@ export default function ServiceFlow(props: { services: Services, uniqueRelations
       snapToGrid={true}
       defaultViewport={defaultViewport}
       fitView
-      attributionPosition="bottom-left"
       connectionMode={ConnectionMode.Loose}
     >
       <Background variant={BackgroundVariant.Dots} />

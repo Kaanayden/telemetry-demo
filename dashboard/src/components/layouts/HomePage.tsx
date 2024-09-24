@@ -96,7 +96,7 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
 
             Active Microservices
           </Button>
-        <Separator/>
+        <Separator className='bg-gray-600'/>
             <ScrollArea className="h-[calc(100vh-100px)] py-4">
               {services.allServices.map((service) => (
                 
@@ -120,9 +120,12 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 w-full min-h-screen">
+      <div className="flex-1 w-full h-[90%]">
         <h1 className="text-2xl font-bold mb-4 mt-6 text-center text-gray-100">Telemetry Dashboard</h1>
-        <div className="flex w-full h-full">
+        <div className='px-4 '>
+        <Separator className='bg-gray-600'/>
+        </div>
+        <div className="flex w-full h-full p-4">
 
               <ServiceFlow services={services} uniqueRelations={uniqueRelations}
               nodes={nodes} setNodes={setNodes}
@@ -131,33 +134,6 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
 
 
 
-        </div>
-      </div>
-      {/* Right sidebar */}
-      <div className="w-72 bg-gray-800 border-r border-gray-700">
-        <div className="p-4">
-          <Button
-            variant="ghost"
-            className="w-full justify-start text-gray-100 hover:bg-gray-700"
-          >
-            {expandedServers ? <ChevronDown className="mr-2" /> : <ChevronRight className="mr-2" />}
-            Microservices
-          </Button>
-          {expandedServers && (
-            <ScrollArea className="h-[calc(100vh-100px)]">
-              {servers.map((server) => (
-                <div key={server.id} className="flex items-center p-2 hover:bg-gray-700 cursor-pointer">
-                  <Server className="mr-2 text-gray-400" />
-                  <span>{server.name}</span>
-                  {server.status === 'online' ? (
-                    <CheckCircle className="ml-auto text-green-400" />
-                  ) : (
-                    <AlertCircle className="ml-auto text-red-400" />
-                  )}
-                </div>
-              ))}
-            </ScrollArea>
-          )}
         </div>
       </div>
     </div>

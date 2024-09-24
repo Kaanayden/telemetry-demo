@@ -47,7 +47,7 @@ export async function GET(request: NextRequest,
         }
     })
 
-    const ping = await clickhouse.ping()
 
-  return Response.json({ test: "hey", period, params, ping, metrics})
+
+  return Response.json(metrics)
 }
