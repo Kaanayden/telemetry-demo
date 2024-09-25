@@ -3,13 +3,7 @@
 
 
 import React, { useState, useEffect } from 'react';
-import { ChevronDown, ChevronRight, Server, AlertCircle, CheckCircle } from 'lucide-react'
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import HomePage from '@/components/layouts/HomePage'
-import { MetricData, Services, TraceData } from '@/utils/interfaces'
-import { ReactFlowProvider } from '@xyflow/react'
+
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import {
@@ -23,8 +17,8 @@ import {
 } from "@/components/ui/select"
 
 
-
 import { ResponsiveLine, Serie } from '@nivo/line';
+import ChartLine from '@/components/layouts/ChartLine';
 
 interface TraceEvent {
     Timestamp: string[];
@@ -74,7 +68,7 @@ interface ServicePageProps {
 
 const ServicePage: React.FC<ServicePageProps> = ({ serviceName, traceData, metricData }) => {
     const [tracesByInstrumentation, setTracesByInstrumentation] = useState<Record<string, Trace[]>>({});
-    const [chartData, setChartData] = useState<Serie[]>([]);
+    const [chartData, setChartData] = useState<{ process: Serie[], system: Serie[] }>({ process: [], system: [] });
     console.log("traceData:", traceData)
     useEffect(() => {
         // Categorize traces by instrumentation names
@@ -88,33 +82,48 @@ const ServicePage: React.FC<ServicePageProps> = ({ serviceName, traceData, metri
         });
         setTracesByInstrumentation(categorizedTraces);
 
+
+
+
         // Prepare data for the chart
         const processMemoryUsage: Serie = {
             id: 'Process Memory Usage',
-            data: metricData.map((item) => ({
-                x: item.interval_start,
-                y: item.avg_process_memory_usage,
-            })),
+            data: metricData.map((item) => {
+
+                const date = new Date(item.interval_start);
+                const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                return {
+                    x: timeString,
+                    y: item.avg_process_memory_usage / 1024 ** 2,
+                }
+            }),
         };
 
         const systemMemoryUsage: Serie = {
             id: 'System Memory Usage',
-            data: metricData.map((item) => ({
-                x: item.interval_start,
-                y: item.avg_system_memory_usage,
-            })),
+            data: metricData.map((item) => {
+
+                const date = new Date(item.interval_start);
+                const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                return {
+                    x: timeString,
+                    y: item.avg_system_memory_usage / 1024 ** 2,
+                }
+            }),
         };
 
-        setChartData([processMemoryUsage, systemMemoryUsage]);
+        setChartData({ process: [processMemoryUsage], system: [systemMemoryUsage] });
     }, [traceData, metricData]);
 
     return (
-        <div className="flex flex-col bg-gray-900 text-gray-100">
+        <div className="flex flex-col bg-gray-900 text-gray-100 px-4">
             <h2 className="text-gray-100 text-center items-center py-4 text-2xl">
                 "{serviceName}" service
             </h2>
             <div></div>
-            {/* Sidebar */}
+
             <div className="w-full h-full bg-gray-800 rounded-md border border-gray-700">
                 <div className="p-4">
                     <div className='flex flex-row items-center justify-between my-4'>
@@ -139,77 +148,26 @@ const ServicePage: React.FC<ServicePageProps> = ({ serviceName, traceData, metri
                         </Select>
                     </div>
 
-                    <div className="h-64">
-                        <ResponsiveLine
-                            data={chartData}
-                            margin={{ top: 20, right: 110, bottom: 50, left: 60 }}
-                            xScale={{ type: 'point' }}
-                            yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false }}
-                            axisBottom={{
-                                orient: 'bottom',
-                                tickSize: 5,
-                                tickPadding: 5,
-                                tickRotation: 45,
-                                legend: 'Time',
-                                legendOffset: 36,
-                                legendPosition: 'middle',
-                            }}
-                            axisLeft={{
-                                orient: 'left',
-                                tickSize: 5,
-                                tickPadding: 5,
-                                tickRotation: 0,
-                                legend: 'Memory Usage',
-                                legendOffset: -50,
-                                legendPosition: 'middle',
-                            }}
-                            colors={{ scheme: 'nivo' }}
-                            pointSize={10}
-                            pointColor={{ theme: 'background' }}
-                            pointBorderWidth={2}
-                            pointBorderColor={{ from: 'serieColor' }}
-                            pointLabel="y"
-                            pointLabelYOffset={-12}
-                            useMesh={true}
-                            legends={[
-                                {
-                                    anchor: 'bottom-right',
-                                    direction: 'column',
-                                    justify: false,
-                                    translateX: 100,
-                                    translateY: 0,
-                                    itemsSpacing: 0,
-                                    itemDirection: 'left-to-right',
-                                    itemWidth: 80,
-                                    itemHeight: 20,
-                                    itemOpacity: 0.75,
-                                    symbolSize: 12,
-                                    symbolShape: 'circle',
-                                    symbolBorderColor: 'rgba(0, 0, 0, .5)',
-                                    effects: [
-                                        {
-                                            on: 'hover',
-                                            style: {
-                                                itemBackground: 'rgba(0, 0, 0, .03)',
-                                                itemOpacity: 1,
-                                            },
-                                        },
-                                    ],
-                                },
-                            ]}
-                        />
+                    <div className='flex flex-row items-center justify-around'>
+
+                        <div className="flex flex-col h-64 w-1/2 text-black px-8 items-center justify-center">
+                            <span className='text-center font-semibold text-white'>Process Memory Usage</span>
+                            <ChartLine chartData={chartData.process} />
+                        </div>
+
+
+                        <div className="flex flex-col h-64 w-1/2 text-black px-8 items-center justify-center">
+                            <span className='text-center font-semibold text-white'>System Memory Usage</span>
+                            <ChartLine chartData={chartData.system} />
+                        </div>
                     </div>
-                    <hr className="bg-gray-600 my-4" />
-                    {/* Add your service list here */}
+
                 </div>
             </div>
 
-            {/* Main content */}
+
             <div className="flex-1 w-full h-screen">
-                <div className="px-4">
-                    <hr className="bg-gray-600" />
-                </div>
-                <div className="flex w-full h-full p-4">
+                <div className="flex w-full h-full py-4">
                     <div className="w-full h-full bg-gray-800 border border-gray-700 rounded-md">
                         <div className="p-4 mt-4 mb-8">
                             <div className='flex flex-row items-center justify-between'>
@@ -253,7 +211,7 @@ const ServicePage: React.FC<ServicePageProps> = ({ serviceName, traceData, metri
                                             <TableCell>{trace.SpanName}</TableCell>
                                             <TableCell>{trace.SpanAttributes['http.url'] || trace.SpanAttributes['url.full']}</TableCell>
                                             <TableCell>{trace.StatusCode}</TableCell>
-                                            <TableCell>{new Date(trace.Timestamp).toLocaleString()}</TableCell>
+                                            <TableCell>{trace.Timestamp}</TableCell>
                                             <TableCell>{trace.Duration / 1000000}</TableCell>
                                         </TableRow>
                                     ))}
