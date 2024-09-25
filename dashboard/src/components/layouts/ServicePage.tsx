@@ -112,10 +112,15 @@ const ServicePage: React.FC<ServicePageProps> = ({ serviceName, traceData, metri
     }, [traceData, metricData]);
 
     return (
-        <div className="flex flex-col bg-gray-900 text-gray-100 px-4 min-h-screen">
-            <h2 className="text-gray-100 text-center items-center py-4 text-2xl">
-                "{serviceName}" service
-            </h2>
+        <div className="flex flex-col bg-gray-900 text-gray-100 px-4 min-h-screen justify-center">
+            <div className='pb-6'>
+                <h2 className="text-gray-100 text-center items-center py-4 text-2xl">
+                    "{serviceName}" service
+                </h2>
+                <div className='flex flex-row items-end justify-end px-2'>
+                    <TimeSelect defaultValue={since} serviceName={serviceName} />
+                </div>
+            </div>
             <div></div>
 
             <div className="w-full h-full bg-gray-800 rounded-md border border-gray-700">
@@ -126,7 +131,7 @@ const ServicePage: React.FC<ServicePageProps> = ({ serviceName, traceData, metri
                             Metrics
                         </h2>
 
-                        <TimeSelect defaultValue={since} />
+
                     </div>
 
                     <div className='flex flex-row items-center justify-around'>
@@ -156,7 +161,7 @@ const ServicePage: React.FC<ServicePageProps> = ({ serviceName, traceData, metri
                                 <h2 className="text-gray-100 mx-4 text-2xl">
                                     Traces
                                 </h2>
-                                <TimeSelect defaultValue={since} />
+
                             </div>
                             <Table>
                                 <TableHeader className='select-none pointer-events-none'>
