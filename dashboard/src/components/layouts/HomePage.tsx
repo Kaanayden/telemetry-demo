@@ -14,7 +14,7 @@ import { useEdgesState, useNodes, useNodesData, useNodesState, useReactFlow } fr
 
 export default function HomePage({ services, uniqueRelations }: HomePageProps) {
 
-
+  console.log("uniqueRelations:", uniqueRelations)
   const [expandedServers, setExpandedServers] = useState(true)
   const [selectedNode, setSelectedNode] = useState(null)
 
@@ -79,7 +79,7 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
           </Button>
         <Separator className='bg-gray-600'/>
             <ScrollArea className="h-[calc(100vh-100px)] py-4">
-              {services.allServices.map((service) => (
+              {services.activeServices.map((service) => (
                 
                 <div key={String(service.ServiceName)} className="flex items-center p-2 hover:bg-gray-700 cursor-pointer" 
                 onClick={() => handleServiceClick(service)} 

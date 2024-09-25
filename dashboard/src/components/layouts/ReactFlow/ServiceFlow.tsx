@@ -19,6 +19,7 @@ import { calculateEdgeHandle } from "@/utils/graph/calculateEdgeHandle";
 
 import "./flow.css";
 import { calculateGraphLayoutServer } from "@/app/actions";
+import CustomEdge from "@/components/layouts/ReactFlow/CustomEdge";
 
 const defaultViewport = { x: 0, y: 0, zoom: 1.5 };
 const snapGrid = [20, 20];
@@ -32,6 +33,11 @@ const connectionLineStyle = { stroke: '#fff' };
 const nodeTypes = {
   serviceNode: ServiceNode,
 };
+
+const edgeTypes = {
+  customEdge: CustomEdge,
+};
+
 
 
 
@@ -120,14 +126,14 @@ export default function ServiceFlow(props: { services: Services, uniqueRelations
        newGraph[relation.to_service].position.x, 
        newGraph[relation.to_service].position.y, 
       );
-
+console.log("relation", relation)
       return({
       id: `${relation.from_service}-${relation.to_service}`,
       source: relation.from_service,
       sourceHandle: sourceHandle,
       target: relation.to_service,
       targetHandle: targetHandle,
-      type: 'bezier',
+      type: 'customEdge',
       markerEnd: {
         type: 'arrowclosed',
         width: 12,
@@ -139,6 +145,11 @@ export default function ServiceFlow(props: { services: Services, uniqueRelations
       selectable: true, 
       //animated: props.uniqueRelations.filter( (value) => (value.from_service === relation.from_service && value.to_service === relation.to_service) || (value.from_service === relation.to_service && value.to_service === relation.from_service)  ).length > 1 ? false : true,
       animated: true,
+      data:{
+        startLabel: "",
+        endLabel: `${(relation.avg_total_duration / 1024 / 1024).toFixed(3)} ms`,
+      }
+      
     })
   });
 
@@ -161,6 +172,7 @@ export default function ServiceFlow(props: { services: Services, uniqueRelations
       edges={edges}
       style={{ background: bgColor }}
       nodeTypes={nodeTypes}
+      edgeTypes={edgeTypes}
       connectionLineStyle={connectionLineStyle}
       snapToGrid={true}
       defaultViewport={defaultViewport}

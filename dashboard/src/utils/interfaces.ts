@@ -6,6 +6,7 @@ export interface Services {
 export interface UniqueRelation {
     from_service: string;
     to_service: string;
+    avg_total_duration: number;
 }
 
 export interface HomePageProps {
