@@ -119,17 +119,20 @@ export default function ChartLine({ chartData }) {
             theme={nivoTheme}
             margin={{ top: 20, right: 110, bottom: 50, left: 60 }}
             curve="monotoneX"
-            xScale={{ type: 'point' }}
+            xScale={{ type: 'time' }}
             yScale={{ type: 'linear', min: 'auto', max: 'auto', stacked: false, }}
+            xFormat={'time: %H:%M'}
+            yFormat=">-1.2f"
             axisBottom={{
                 orient: 'bottom',
                 tickSize: 5,
                 tickPadding: 5,
                 tickRotation: 45,
                 legend: 'Time',
-                legendOffset: 36,
+                legendOffset: 45,
                 legendPosition: 'middle',
-
+                tickValues: 15,
+                format: '%H:%M'
             }}
             axisLeft={{
                 orient: 'left',

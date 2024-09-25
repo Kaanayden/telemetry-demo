@@ -8,17 +8,23 @@ import HomePage from '@/components/layouts/HomePage'
 import { Services } from '@/utils/interfaces'
 import { ReactFlowProvider } from '@xyflow/react'
 import ServicePage from '@/components/layouts/ServicePage'
+import { sinceToPeriod } from '@/utils/periods'
 
 
 
-export default async function Home({params}: {params: {serviceName: string}}) {
+export default async function Home(
+  {params, searchParams}: 
+  {params: {serviceName: string}, searchParams: {since: string}}
+) {
 
 const { serviceName } = params;
+const { since } = searchParams;
 
-  const metrics = await (await fetch(`http://localhost:3000/api/${serviceName}/metrics?period=5m&since=1`, { cache: 'no-cache' })).json();
-  const traces = await (await fetch(`http://localhost:3000/api/${serviceName}/traces?since=15`, { cache: 'no-cache' })).json();
+
+  const metrics = await (await fetch(`http://localhost:3000/api/${serviceName}/metrics?period=5m&since=${sinceToPeriod[since] ? since : "1"}`, { cache: 'no-cache' })).json();
+  const traces = await (await fetch(`http://localhost:3000/api/${serviceName}/traces?since=${ sinceToPeriod[since] ? since : "1"}`, { cache: 'no-cache' })).json();
   return (
-    <ServicePage serviceName={serviceName} metricData={metrics} traceData={traces}/>
+    <ServicePage since={sinceToPeriod[since] ? since : "1"} serviceName={serviceName} metricData={metrics} traceData={traces}/>
   )
 
   // 
