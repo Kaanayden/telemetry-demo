@@ -131,6 +131,9 @@ app.put('/update-delivery-status/', async (req: Request, res: Response) => {
     // Get the order ID from the request parameters
     const deliveryId = req.params.deliveryId;
 
+    // Delay the response to simulate a long process
+    await new Promise(resolve => setTimeout(resolve, 10000));
+
     await fetch(
         `${process.env.SERVICE_URL}:${process.env.MEAL_ORDER_PORT}/inform-delivery-status`,
         {

@@ -92,6 +92,11 @@ services:
     env_file:
     - .env
     restart: always
+  tester:
+    build: ./microservices/tester
+    env_file:
+    - .env
+    restart: always
 
 
 

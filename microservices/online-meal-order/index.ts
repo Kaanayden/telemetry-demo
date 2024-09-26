@@ -60,6 +60,9 @@ app.post('/restaurants/comment/upload-picture', async (req: Request, res: Respon
 app.post('/orders/purchase', async (req: Request, res: Response) => {
     const { mealId, quantity, restaurantId } = req.body;
 
+    // Delay the response to simulate a long process
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
     // Process the purchase order and return a response
     // ...
 
