@@ -28,7 +28,7 @@ function EdgeLabel({ transform, label }: { transform: string; label: string }) {
 }
 
 const CustomEdge: FC<
-  EdgeProps<Edge<{ startLabel: string; endLabel: string }>>
+  EdgeProps<Edge<{ startLabel: string; endLabel: string, isHover: boolean | undefined }>>
 > = ({
   id,
   sourceX,
@@ -53,19 +53,26 @@ const CustomEdge: FC<
     <>
       <BaseEdge id={id} path={edgePath} markerEnd={markerEnd}/>
     <EdgeLabelRenderer>
-        {data.startLabel && (
+        {data?.startLabel && (
             <EdgeLabel
                 transform={`translate(-50%, 0%) translate(${sourceX}px,${sourceY}px)`}
                 label={data.startLabel}
             />
         )}
-        {data.endLabel && (
+        {data?.endLabel && (
+            <div
+            style={{
+              opacity: data?.isHover ? 1 : 0,
+              transition: 'opacity 0.3s ease-in-out',
+            }}
+            >
             <EdgeLabel
-                transform={`translate(-50%, -35%) translate(${labelX}px,${labelY}px)`}
-                label={data.endLabel}
+              transform={`translate(-35%, -35%) translate(${labelX}px,${labelY}px) scale(1.5)`}
+              label={data.endLabel}
             />
+            </div>
         )}
-    </EdgeLabelRenderer>}
+    </EdgeLabelRenderer>
     </>
   );
 };

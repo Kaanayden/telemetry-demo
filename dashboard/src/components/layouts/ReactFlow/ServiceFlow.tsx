@@ -59,7 +59,7 @@ export default function ServiceFlow(props: { services: Services, uniqueRelations
 
   const initializeGraph = async () => {
 
-    const newNodes = props.services.activeServices.map((service) => ({
+    const newNodes = props.services.allServices.map((service) => ({
       id: service.ServiceName,
       type: 'serviceNode',
       data: { service },
@@ -155,15 +155,60 @@ console.log("relation", relation)
 
   console.log("newEdges", newEdges)
 
+
     setNodes(formattedNodes);
     setEdges(newEdges);
 
-
   }
+  
 
   useEffect(() => {
     initializeGraph();
   }, []);
+
+  const handleEdgeMouseEnter = (event, edge) => {
+    console.log("edge", edge)
+    const newEdges = edges.map((item) => {
+      if (item.id === edge.id) {
+        return {
+          ...item,
+          data: {
+            ...item.data,
+            isHover: true,
+          },
+        };
+      } else {
+        return {
+          ...item,
+          data: {
+            ...item.data,
+            isHover: false,
+          },
+        };
+      }
+    })
+    setEdges(newEdges);
+  }
+  
+  const handleEdgeMouseLeave = (event, edge) => {
+    const newEdges = edges.map((item) => {
+      if (item.id === edge.id) {
+        return {
+          ...item,
+          data: {
+            ...item.data,
+            isHover: false,
+          },
+        };
+      }
+      return item;
+    }
+    )
+    setEdges(newEdges);
+  }
+  
+    
+    
 
   return (
 
@@ -178,6 +223,8 @@ console.log("relation", relation)
       defaultViewport={defaultViewport}
       fitView
       connectionMode={ConnectionMode.Loose}
+      onEdgeMouseEnter={handleEdgeMouseEnter}
+      onEdgeMouseLeave={handleEdgeMouseLeave}
     >
       <Background variant={BackgroundVariant.Dots} />
       <div className="text-black">

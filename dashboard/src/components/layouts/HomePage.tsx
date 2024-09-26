@@ -10,6 +10,7 @@ import { HomePageProps } from '@/utils/interfaces'
 import ServiceFlow from '@/components/layouts/ReactFlow/ServiceFlow'
 import { Separator } from "@/components/ui/separator"
 import { useEdgesState, useNodes, useNodesData, useNodesState, useReactFlow } from '@xyflow/react'
+import { ChatModal } from './ChatModal'
 
 
 export default function HomePage({ services, uniqueRelations }: HomePageProps) {
@@ -66,6 +67,8 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
   }
 
   return (
+    <>
+   
     <div className="flex h-screen bg-gray-900 text-gray-100">
       {/* Sidebar */}
       <div className="w-72 bg-gray-800 rounded-md border border-gray-700 my-4">
@@ -79,7 +82,7 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
           </Button>
         <Separator className='bg-gray-600'/>
             <ScrollArea className="h-[calc(100vh-100px)] py-4">
-              {services.activeServices.map((service) => (
+              {services.allServices.map((service) => (
                 
                 <div key={String(service.ServiceName)} className="flex items-center p-2 hover:bg-gray-700 cursor-pointer" 
                 onClick={() => handleServiceClick(service)} 
@@ -122,5 +125,6 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
         </div>
       </div>
     </div>
+    </>
   )
 }
