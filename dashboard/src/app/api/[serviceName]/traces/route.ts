@@ -20,7 +20,7 @@ export async function GET(request: NextRequest,
 
     const clickhouse = getClickhouseClient();
 
-    const query = `SELECT * FROM otel_traces WHERE ServiceName = '${serviceName}' AND SpanKind != 'Internal' AND Timestamp >= now() - INTERVAL ${since} HOUR`;
+    const query = `SELECT * FROM otel_traces WHERE ServiceName = '${serviceName}' AND SpanKind != 'Internal' AND Timestamp >= now() - INTERVAL ${since} HOUR LIMIT 300`;
     const results = await clickhouse.query({ query: query, format: 'JSONEachRow' })
     const traces : TraceData[] = await results.json();
 

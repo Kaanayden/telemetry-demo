@@ -1,6 +1,7 @@
 import React from 'react';
 import { Handle, Position } from '@xyflow/react';
 import '@xyflow/react/dist/style.css';
+import { useRouter } from 'next/navigation';
 
 interface ServiceNodeProps {
     data: {
@@ -12,9 +13,16 @@ interface ServiceNodeProps {
 }
 
 const ServiceNode = ({ data } : ServiceNodeProps) => {
-    console.log("hey", data)
+const router = useRouter();
+
+
+const handleClick = () => {
+    // Navigate to service details page
+    router.push(`/${data.service.ServiceName}`);
+}
+
     return (
-        <div className='serviceNodeContainer w-48 h-24 border-2 border-gray-500 bg-[#1A192B] py-8 px-2 flex flex-col justify-center items-center rounded-md hover:bg-slate-700' >
+        <div onClick={handleClick} className='serviceNodeContainer cursor-pointer w-48 h-24 border-2 border-gray-500 bg-[#1A192B] py-8 px-2 flex flex-col justify-center items-center rounded-md hover:bg-slate-700' >
         <Handle
           isConnectableStart
           isConnectableEnd

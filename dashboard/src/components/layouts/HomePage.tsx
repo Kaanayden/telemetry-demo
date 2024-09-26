@@ -11,6 +11,7 @@ import ServiceFlow from '@/components/layouts/ReactFlow/ServiceFlow'
 import { Separator } from "@/components/ui/separator"
 import { useEdgesState, useNodes, useNodesData, useNodesState, useReactFlow } from '@xyflow/react'
 import { ChatModal } from './ChatModal'
+import { useRouter } from 'next/navigation'
 
 
 export default function HomePage({ services, uniqueRelations }: HomePageProps) {
@@ -22,10 +23,17 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
 
+  const router = useRouter();
+
   console.log("node test:", nodes)
 
+
+
   const handleServiceClick = (service) => {
-    console.log(service.ServiceName)
+
+    // Navigate to service details page
+    router.push(`/${service.ServiceName}`);
+
   }
   
   const handleHoverOn = (service) => {
@@ -69,7 +77,7 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
   return (
     <>
    
-    <div className="flex h-screen bg-gray-900 text-gray-100">
+    <div className="flex flex-col md:flex-row min-h-screen h-full items-center bg-gray-900 text-gray-100">
       {/* Sidebar */}
       <div className="w-72 bg-gray-800 rounded-md border border-gray-700 my-4">
         <div className="p-4">
@@ -104,21 +112,20 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
       </div>
 
       {/* Main content */}
-      <div className="flex-1 w-full h-full">
+      <div className="flex-1 w-full h-full h-screen">
  <div className='px-4 '>
-        <Separator className='bg-gray-600'/>
+        <Separator className=' md:hidden bg-gray-600'/>
         </div>
         <div className="flex w-full h-full p-4">
-          <Card className="w-full h-full bg-gray-800 border-gray-700">
+          <Card className="w-full h-full h-full bg-gray-800 border-gray-700">
             <CardHeader>
               <CardTitle className="text-gray-100 text-center">Service Flow</CardTitle>
             </CardHeader>
-            <CardContent className="h-[90%] text-white">
+            <CardContent className="h-screen md:h-[90%] text-white">
 
             <ServiceFlow services={services} uniqueRelations={uniqueRelations}
               nodes={nodes} setNodes={setNodes}
               edges={edges} setEdges={setEdges}
-              
               />
             </CardContent>
           </Card>

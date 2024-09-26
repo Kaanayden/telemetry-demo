@@ -13,13 +13,13 @@ export async function GET(request: NextRequest) {
   SELECT *
   FROM otel_traces
   WHERE SpanKind = 'Client'
-      AND Timestamp >= now() - INTERVAL 5 MINUTE
+      AND Timestamp >= now() - INTERVAL 1 HOUR
 ),
 ServerSpans AS (
   SELECT *
   FROM otel_traces
   WHERE SpanKind = 'Server'
-      AND Timestamp >= now() - INTERVAL 5 MINUTE
+      AND Timestamp >= now() - INTERVAL 1 HOUR
 ),
 RankedServerSpans AS (
   SELECT 

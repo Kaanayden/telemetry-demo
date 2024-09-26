@@ -18,7 +18,7 @@ export default function TimeSelect({ defaultValue, serviceName }: { defaultValue
     const router = useRouter()
 
     const handleChange = (value: string) => {
-        router.push(
+        router.replace(
             `/${serviceName}?since=${value}`,)
     }
 
