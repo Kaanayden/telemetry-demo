@@ -7,6 +7,8 @@ import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet"
 import { Send, Bot, User, MessageCircle } from 'lucide-react'
+import { Textarea } from '@/components/ui/textarea'
+import Chat from './Chat'
 
 export default function ChatModal() {
   const [input, setInput] = useState('')
@@ -28,7 +30,8 @@ export default function ChatModal() {
           <SheetHeader>
             <SheetTitle className="text-gray-100">AI Assistant</SheetTitle>
           </SheetHeader>
-          <div className="flex flex-col h-[calc(100vh-8rem)]">
+          <div className="flex flex-col h-full">
+            <Chat/>
             <ScrollArea className="flex-grow p-4 space-y-4">
               {messages.map((message) => (
                 <div
@@ -55,9 +58,9 @@ export default function ChatModal() {
                 </div>
               ))}
             </ScrollArea>
-            <form onSubmit={handleSendMessage} className="p-4 border-t border-gray-700">
-              <div className="flex space-x-2">
-                <Input
+            <form onSubmit={handleSendMessage} className="py-4 px-2 border-t border-gray-700">
+              <div className="flex space-x-4 justify-center items-center">
+                <Textarea
                   value={input}
                   onChange={(e) => {
                     setInput(e.target.value)
@@ -82,7 +85,7 @@ export default function ChatModal() {
         onClick={() => setIsOpen(true)}
       >
         <MessageCircle className="w-6 h-6 mr-2" />
-        Remembering AI
+        Ask AI Assistant
       </Button>
     </>
   )

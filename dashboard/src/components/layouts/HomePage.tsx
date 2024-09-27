@@ -10,7 +10,7 @@ import { HomePageProps } from '@/utils/interfaces'
 import ServiceFlow from '@/components/layouts/ReactFlow/ServiceFlow'
 import { Separator } from "@/components/ui/separator"
 import { useEdgesState, useNodes, useNodesData, useNodesState, useReactFlow } from '@xyflow/react'
-import { ChatModal } from './ChatModal'
+import ChatModal from './ChatModal'
 import { useRouter } from 'next/navigation'
 
 
@@ -29,14 +29,14 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
 
 
 
-  const handleServiceClick = (service) => {
+  const handleServiceClick = (service: {ServiceName: string}) => {
 
     // Navigate to service details page
     router.push(`/${service.ServiceName}`);
 
   }
   
-  const handleHoverOn = (service) => {
+  const handleHoverOn = (service: {ServiceName: string}) => {
 
     const newNodes = nodes.map((node) => {
    
@@ -58,7 +58,7 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
 
   }
   
-  const handleHoverOff = (service) => {
+  const handleHoverOff = (service:  {ServiceName: string}) => {
     const newNodes = nodes.map((node) => {
    
       if (node.id === service.ServiceName) {
@@ -76,7 +76,7 @@ export default function HomePage({ services, uniqueRelations }: HomePageProps) {
 
   return (
     <>
-   
+   <ChatModal />
     <div className="flex flex-col md:flex-row min-h-screen h-full items-center bg-gray-900 text-gray-100">
       {/* Sidebar */}
       <div className="w-72 bg-gray-800 rounded-md border border-gray-700 my-4">

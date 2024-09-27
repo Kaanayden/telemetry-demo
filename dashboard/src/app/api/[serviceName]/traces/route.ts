@@ -1,6 +1,5 @@
 import { getClickhouseClient } from "@/utils/clickhouse"
 import { TraceData } from "@/utils/interfaces";
-import { periodToQuery, validPeriods } from "@/utils/periods";
 import { NextRequest } from "next/server"
 
 

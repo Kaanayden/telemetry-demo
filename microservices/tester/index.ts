@@ -33,6 +33,12 @@ interface Endpoint {
         path: '/upload-menu/akdeniz-mutfak',
         method: 'POST',
     },
+    {
+        port: process.env.MEAL_ORDER_PORT,
+        path: '/restaurants',
+        method: 'GET',
+    },
+
 
   ];
 
