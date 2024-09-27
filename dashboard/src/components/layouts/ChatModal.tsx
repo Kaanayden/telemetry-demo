@@ -17,6 +17,8 @@ import Markdown from 'react-markdown'
 
 import "katex/dist/katex.min.css"
 import ContentRenderer from '../ui/ContentRenderer'
+import { solarizedlight } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 
 export default function ChatModal() {
 
@@ -27,20 +29,20 @@ export default function ChatModal() {
       maxSteps: 15,
     });
 
-    return (
-      <>
-        <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent className="w-full md:min-w-[800px] lg:min-w-[1200px] bg-gray-900 text-gray-100 border-l border-gray-800">
-            <SheetHeader>
-              <SheetTitle className="text-gray-100">AI Assistant</SheetTitle>
-            </SheetHeader>
-            <div className="flex flex-col h-full">
-              <ScrollArea className="flex-grow p-4 space-y-4 break-words">
+  return (
+    <>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
+        <SheetContent className="w-full md:min-w-[800px] lg:min-w-[1200px] bg-gray-900 text-gray-100 border-l border-gray-800">
+          <SheetHeader>
+            <SheetTitle className="text-gray-100">AI Assistant</SheetTitle>
+          </SheetHeader>
+          <div className="flex flex-col h-full">
+            <ScrollArea className="flex-grow p-4 space-y-4 break-words">
 
-                {messages?.map((m: Message) => (
-                  <div key={m.id}>
-                    <strong>{m.role}:</strong>
-                    <ContentRenderer content={m.content} />
+              {messages?.map((m: Message) => (
+                <div key={m.id}>
+                  <strong>{m.role}:</strong>
+                  <ContentRenderer content={m.content} />
 
                   {m.toolInvocations?.map((toolInvocation: ToolInvocation) => {
                     const toolCallId = toolInvocation.toolCallId;
@@ -50,7 +52,14 @@ export default function ChatModal() {
                     // other tools:
                     return 'result' in toolInvocation ? (
                       <div key={toolCallId}>
-                        Performing {`${toolInvocation.toolName == 'makeQuery' ? "analysis" : toolInvocation.toolName }... `}
+                        Performing {`${toolInvocation.toolName == 'makeQuery' ? "analysis" : toolInvocation.toolName}... `}
+                        <SyntaxHighlighter
+                          style={solarizedlight}
+                          language={'sql'}
+                          PreTag="div"
+                        >
+                          {String(toolInvocation.args.query).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
                       </div>
                     ) : (
                       <div key={toolCallId}>Calling {toolInvocation.toolName}...</div>
@@ -65,7 +74,7 @@ export default function ChatModal() {
               <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 space-x-4 justify-center items-center">
                 <Input
                   value={input}
-                  
+
                   onChange={(e) => {
                     handleInputChange(e)
                   }}
