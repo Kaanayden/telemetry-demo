@@ -35,7 +35,7 @@ export default function ChatModal() {
               <SheetTitle className="text-gray-100">AI Assistant</SheetTitle>
             </SheetHeader>
             <div className="flex flex-col h-full">
-              <ScrollArea className="flex-grow p-4 space-y-4 overflow-y-auto break-words">
+              <ScrollArea className="flex-grow p-4 space-y-4 break-words">
 
                 {messages?.map((m: Message) => (
                   <div key={m.id}>
