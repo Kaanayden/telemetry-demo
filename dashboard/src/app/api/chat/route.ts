@@ -392,7 +392,7 @@ const performQuery = async (query: string) => {
   const clickhouse = getClickhouseClient();
   try {
  const results = await clickhouse.query({ query: query, format: 'JSONEachRow' })
-  const stringRes = JSON.stringify(await results.json());
+  const stringRes = await results.json();
   return stringRes;
   } catch (error : any) {
     return `You made an error while writing and SQL query perform became unsuccessful. This is not related to user but the SQL query while using the tool. Performing that querys has given the error: ${error.message}`;

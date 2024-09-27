@@ -16,6 +16,7 @@ import { Message, useChat } from 'ai/react';
 import Markdown from 'react-markdown'
 
 import "katex/dist/katex.min.css"
+import ContentRenderer from '../ui/ContentRenderer'
 
 export default function ChatModal() {
 
@@ -39,9 +40,8 @@ export default function ChatModal() {
                 {messages?.map((m: Message) => (
                   <div key={m.id}>
                     <strong>{m.role}:</strong>
-                    <Markdown remarkPlugins={[remarkmath]} rehypePlugins={[rehypeKatex]}>
-                    {m.content}
-                  </Markdown>
+                    <ContentRenderer content={m.content} />
+
                   {m.toolInvocations?.map((toolInvocation: ToolInvocation) => {
                     const toolCallId = toolInvocation.toolCallId;
                     const addResult = (result: string) =>
@@ -50,7 +50,7 @@ export default function ChatModal() {
                     // other tools:
                     return 'result' in toolInvocation ? (
                       <div key={toolCallId}>
-                        Performing {`${toolInvocation.toolName}: `}
+                        Performing {`${toolInvocation.toolName == 'makeQuery' ? "analysis" : toolInvocation.toolName }... `}
                       </div>
                     ) : (
                       <div key={toolCallId}>Calling {toolInvocation.toolName}...</div>
