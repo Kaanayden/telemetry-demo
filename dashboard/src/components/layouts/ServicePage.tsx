@@ -123,8 +123,8 @@ const ServicePage: React.FC<ServicePageProps> = ({ serviceName, traceData, metri
             </div>
             <div></div>
 
-            <div className="w-full h-full bg-gray-800 rounded-md border border-gray-700">
-                <div className="p-4">
+            <div className="w-full h-full bg-gray-800 rounded-md border border-gray-700 py-4 items-center justify-center ">
+
                     <div className='flex flex-row items-center justify-between my-4'>
 
                         <h2 className="text-gray-100 mx-4 text-2xl">
@@ -134,21 +134,20 @@ const ServicePage: React.FC<ServicePageProps> = ({ serviceName, traceData, metri
 
                     </div>
 
-                    <div className='flex flex-row items-center justify-around'>
+                    <div className='flex flex-col sm:flex-row items-center justify-around'>
 
-                        <div className="flex flex-col h-64 w-1/2 text-black px-8 items-center justify-center">
+                        <div className="flex flex-col h-64 w-full sm:w-1/2 text-black items-center justify-center">
                             <span className='text-center font-semibold text-white'>Process Memory Usage</span>
                             <ChartLine chartData={chartData.process} />
                         </div>
 
 
-                        <div className="flex flex-col h-64 w-1/2 text-black px-8 items-center justify-center">
+                        <div className="flex flex-col h-64 w-full sm:w-1/2 text-black items-center justify-center">
                             <span className='text-center font-semibold text-white'>System Memory Usage</span>
                             <ChartLine chartData={chartData.system} />
                         </div>
                     </div>
 
-                </div>
             </div>
 
 

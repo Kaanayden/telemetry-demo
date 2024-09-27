@@ -29,7 +29,7 @@ export default function ChatModal() {
     return (
       <>
         <Sheet open={isOpen} onOpenChange={setIsOpen}>
-          <SheetContent className="w-[600px] md:min-w-[800px] lg:min-w-[1200px] bg-gray-900 text-gray-100 border-l border-gray-800">
+          <SheetContent className="w-full md:min-w-[800px] lg:min-w-[1200px] bg-gray-900 text-gray-100 border-l border-gray-800">
             <SheetHeader>
               <SheetTitle className="text-gray-100">AI Assistant</SheetTitle>
             </SheetHeader>
@@ -61,8 +61,8 @@ export default function ChatModal() {
               ))}
 
             </ScrollArea>
-            <form onSubmit={handleSubmit} className="py-4 px-2 border-t border-gray-700">
-              <div className="flex space-x-4 justify-center items-center">
+            <form onSubmit={handleSubmit} className="py-4 px-2 border-t border-gray-700 ">
+              <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 space-x-4 justify-center items-center">
                 <Input
                   value={input}
                   
