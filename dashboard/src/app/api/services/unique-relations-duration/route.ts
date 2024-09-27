@@ -13,13 +13,13 @@ export async function GET(request: NextRequest) {
   SELECT *
   FROM otel_traces
   WHERE SpanKind = 'Client'
-      AND Timestamp >= now() - INTERVAL 1 HOUR
+    AND Timestamp >= now() - INTERVAL 1 HOUR
 ),
 ServerSpans AS (
   SELECT *
   FROM otel_traces
   WHERE SpanKind = 'Server'
-      AND Timestamp >= now() - INTERVAL 1 HOUR
+    AND Timestamp >= now() - INTERVAL 1 HOUR
 ),
 RankedServerSpans AS (
   SELECT 
@@ -37,14 +37,14 @@ RankedServerSpans AS (
 SELECT 
   client.ServiceName AS from_service,
   server.ServiceName AS to_service,
-  AVG(server.Duration + client.Duration) AS avg_total_duration
+  AVG(toUnixTimestamp64Nano(server.Timestamp) - toUnixTimestamp64Nano(client.Timestamp)) AS avg_total_duration
 FROM ClientSpans AS client
 JOIN RankedServerSpans AS server
   ON server.client_SpanId = client.SpanId
   AND server.rn = 1
-GROUP BY
-  client.ServiceName,
-  server.ServiceName`;
+GROUP BY 
+from_service,
+to_service`;
 
     const results = await clickhouse.query({ query: query, format: 'JSONEachRow' })
     const jsonResults : { ServiceName: String}[] = await results.json();
