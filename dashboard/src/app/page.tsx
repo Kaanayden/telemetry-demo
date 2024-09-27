@@ -10,7 +10,7 @@ import { ReactFlowProvider } from '@xyflow/react'
 
 export default async function Home() {
 
-  const services: Services = await (await fetch(`http://localhost:${process.env.PORT}/api/services?since=5`, { cache: 'no-cache' })).json();
+  const services: Services = await (await fetch(`http://localhost:${process.env.PORT}/api/services?since=5`)).json();
   const relations = await (await fetch(`http://localhost:${process.env.PORT}/api/services/unique-relations-duration`)).json();
   return (
     <ReactFlowProvider>
