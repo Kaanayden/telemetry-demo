@@ -63,7 +63,7 @@ interface Endpoint {
 
   function startInterval(): void {
     callEndpoints(); // Call immediately on startup
-    setInterval(callEndpoints, 300000); // Call every 5 minutes
+    setInterval(callEndpoints, 1500000); // Call every 25 minutes
   }
   
   startInterval();
