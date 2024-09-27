@@ -10,19 +10,6 @@ export default function Chat() {
         useChat({
             api: '/api/chat',
             maxSteps: 15,
-
-            // run client-side tools that are automatically executed:
-            async onToolCall({ toolCall }) {
-                if (toolCall.toolName === 'getLocation') {
-                    const cities = [
-                        'New York',
-                        'Los Angeles',
-                        'Chicago',
-                        'San Francisco',
-                    ];
-                    return cities[Math.floor(Math.random() * cities.length)];
-                }
-            },
         });
 
     return (
@@ -40,30 +27,10 @@ export default function Chat() {
                                 const addResult = (result: string) =>
                                     addToolResult({ toolCallId, result });
 
-                                // render confirmation tool (client-side tool with user interaction)
-                                if (toolInvocation.toolName === 'askForConfirmation') {
-                                    return (
-                                        <div key={toolCallId}>
-                                            {toolInvocation.args.message}
-                                            <div>
-                                                {'result' in toolInvocation ? (
-                                                    <b>{toolInvocation.result}</b>
-                                                ) : (
-                                                    <>
-                                                        <button onClick={() => addResult('Yes')}>Yes</button>
-                                                        <button onClick={() => addResult('No')}>No</button>
-                                                    </>
-                                                )}
-                                            </div>
-                                        </div>
-                                    );
-                                }
-
                                 // other tools:
                                 return 'result' in toolInvocation ? (
                                     <div key={toolCallId}>
-                                        Tool call {`${toolInvocation.toolName}: `}
-                                        {toolInvocation.result}
+                                        Performing {`${toolInvocation.toolName}: `}
                                     </div>
                                 ) : (
                                     <div key={toolCallId}>Calling {toolInvocation.toolName}...</div>
